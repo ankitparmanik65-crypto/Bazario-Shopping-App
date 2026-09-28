@@ -1,0 +1,131 @@
+/* ═══════════════════════════════════════
+   PRODUCT SKELETON LOADER
+   ═══════════════════════════════════════ */
+
+.product-skeleton {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ─── SHIMMER EFFECT ─── */
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--bg-secondary) 0%,
+    var(--border-color) 50%,
+    var(--bg-secondary) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: var(--radius-sm);
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ─── IMAGE ─── */
+.skeleton-image {
+  width: 100%;
+  height: 250px;
+  border-radius: 12px;
+}
+
+/* ─── LINES ─── */
+.skeleton-line {
+  height: 14px;
+  border-radius: 6px;
+}
+
+.skeleton-category {
+  width: 40%;
+  height: 10px;
+}
+
+.skeleton-title {
+  width: 90%;
+  height: 16px;
+}
+
+.skeleton-title.short {
+  width: 60%;
+}
+
+.skeleton-price {
+  width: 35%;
+  height: 20px;
+  margin-top: 4px;
+}
+
+.skeleton-btn {
+  width: 100%;
+  height: 38px;
+  border-radius: var(--radius-md);
+  margin-top: 4px;
+}
+
+/* ─── DARK MODE ─── */
+[data-theme="dark"] .shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--bg-secondary) 0%,
+    var(--border-color-strong) 50%,
+    var(--bg-secondary) 100%
+  );
+  background-size: 200% 100%;
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 768px) {
+  .product-skeleton {
+    padding: 12px;
+  }
+
+  .skeleton-image {
+    height: 180px;
+  }
+
+  .skeleton-line {
+    height: 12px;
+  }
+
+  .skeleton-title {
+    height: 14px;
+  }
+
+  .skeleton-price {
+    height: 18px;
+  }
+
+  .skeleton-btn {
+    height: 34px;
+  }
+}
+
+@media (max-width: 500px) {
+  .product-skeleton {
+    padding: 10px;
+  }
+
+  .skeleton-image {
+    height: 140px;
+  }
+
+  .skeleton-title {
+    height: 12px;
+  }
+
+  .skeleton-btn {
+    height: 30px;
+  }
+}

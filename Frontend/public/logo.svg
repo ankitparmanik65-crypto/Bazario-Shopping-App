@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 48" width="240" height="48">
+  <defs>
+    <linearGradient id="bazarioGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff6b35" />
+      <stop offset="100%" stop-color="#f7931e" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Icon: Bag with B -->
+  <g transform="translate(0, 0)">
+    <path 
+      d="M13 14 L11 42 Q11 45 14 45 L34 45 Q37 45 37 42 L35 14 Z" 
+      fill="url(#bazarioGrad)" 
+    />
+    <path 
+      d="M17 14 Q17 6 24 6 Q31 6 31 14" 
+      stroke="url(#bazarioGrad)" 
+      stroke-width="3" 
+      fill="none" 
+      stroke-linecap="round" 
+    />
+    <text 
+      x="24" 
+      y="36" 
+      font-size="20" 
+      font-weight="900" 
+      fill="white" 
+      text-anchor="middle" 
+      font-family="Arial, Helvetica, sans-serif"
+    >
+      B
+    </text>
+  </g>
+  
+  <!-- Text: Bazario -->
+  <text 
+    x="56" 
+    y="34" 
+    font-size="28" 
+    font-weight="900" 
+    fill="url(#bazarioGrad)" 
+    font-family="Arial, Helvetica, sans-serif"
+    letter-spacing="-0.5"
+  >
+    Bazario
+  </text>
+</svg>
