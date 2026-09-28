@@ -459,6 +459,7 @@ Cart      ↓
 
 ### Phase 1: Foundation
 ✅ React + Vite frontend setup
+
 ✅ Node.js + Express backend setup
 ✅ MongoDB connection
 ✅ User model, Product model
