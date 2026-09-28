@@ -468,217 +468,138 @@ Cart      ↓
 ✅ Role-based access (user/admin)
 ✅ Auth Context in frontend
 ✅ Login/Register pages with error handling
-```
+
 ### Phase 3: Products
 ✅ Products API (CRUD, filter, search, pagination)
-
 ✅ 194 products from DummyJSON
-
 ✅ Products listing page
-
 ✅ Category filters
-
 ✅ Search functionality
-
 ✅ Product cards with images
-
 ✅ Load More pagination
 
 ### Phase 4: Product Details
 ✅ Product details page
-
 ✅ Related products
-
 ✅ Smart back navigation (scroll position preserved)
 
 ### Phase 5: Cart
 ✅ Cart management (add/remove/quantity)
-
 ✅ Cart drawer
-
 ✅ Cart persistence in localStorage
-
 ✅ Free shipping progress bar
-
 ✅ Cart totals
 
 ### Phase 6: Wishlist
 ✅ Wishlist API
-
 ✅ Wishlist state management
-
 ✅ Guest fallback (localStorage)
-
 ✅ Wishlist page redesign with animations
 
 ### Phase 7: Reviews
 ✅ Reviews API
-
 ✅ Auto-calculated product rating
-
 ✅ Write review form
-
 ✅ Review list with dates
-
 ✅ Star ratings
 
 ### Phase 8: Checkout & Payment
 ✅ Checkout page with form validation
-
 ✅ Mock payment system (COD/UPI/Card)
-
 ✅ Payment success screen
-
 ✅ Order creation API
 
 ### Phase 9: Orders
 ✅ Order History page
-
 ✅ Order tracking timeline
-
 ✅ Order status updates (admin)
-
 ✅ Cancel Order feature
-
 ✅ Payment status logic (Paid/Pending/Refunded/Cancelled)
-
 ✅ COD auto-paid on delivery
 
 ### Phase 10: Admin Panel
 ✅ Admin Dashboard with tabs
-
 ✅ Products management (CRUD)
-
 ✅ Orders management
-
 ✅ Stats dashboard
-
 ✅ Admin-only routes
-
 ✅ Admin button in navbar
 
 ### Phase 11: UX Improvements
 ✅ Dark / Light mode
-
 ✅ Amazon-style guest checkout flow
-
 ✅ Login redirect with return URL
-
 ✅ Fixed 401 error handling in login
-
 ✅ Mobile responsive (2-column products)
-
 ✅ Toast notifications
-
 ✅ Loading skeletons
-
 ✅ Scroll to top on route change
 
 ### Phase 12: Branding
 ✅ Custom "B in Bag" SVG logo
-
 ✅ Custom favicon
-
 ✅ Gradient text for brand
 
 ### Phase 13: Routing (React Router)
 ✅ Full migration from state-based to URL-based routing
-
 ✅ Protected routes with loading state
-
 ✅ 404 Not Found page
-
 ✅ Refresh-safe navigation
-
 ✅ Browser back/forward support
-
 ✅ Shareable URLs (deep linking)
 
 ### Phase 14: Search & Discovery
 ✅ Search autocomplete with dropdown
-
 ✅ Keyboard navigation (arrow keys, Enter, Escape)
-
 ✅ Product images in suggestions
-
 ✅ Click-outside to close
 
 ### Phase 15: Image Gallery
 ✅ Multi-image product gallery
-
 ✅ Thumbnail strip
-
 ✅ Left/right navigation arrows
-
 ✅ Image counter (1/4, 2/4, etc.)
-
 ✅ Active thumbnail highlighting
 
 ### Phase 16: Coupon & Discount System
 ✅ Coupon model & API
-
 ✅ Admin coupon management (CRUD + toggle)
-
 ✅ Available coupons public API
-
 ✅ Validate coupon with subtotal
-
 ✅ **View Available Coupons modal**
-
 ✅ **Click to auto-apply coupon**
-
 ✅ **Manual coupon code entry**
-
 ✅ **Real-time discount calculation**
-
 ✅ **Eligibility check with "Add ₹XXX more" message**
-
 ✅ **Save amount preview**
-
 ✅ **One use per user per coupon**
-
 ✅ **Usage limit tracking**
-
 ✅ **Expiry date support**
-
 ✅ **Discount shown in order summary**
-
 ✅ **Coupon data saved in order**
 
 ### Phase 17: User-Specific Cart
 ✅ **Separate cart per user** (`cart_<userId>` key in localStorage)
-
 ✅ **Guest cart** (`cart_guest` key)
-
 ✅ **Guest cart migration on login** with toast notification
-
 ✅ **Cart reload on user change**
-
 ✅ **Cart persists per user across sessions**
 
 ### Phase 18: Cart Product Navigation
 ✅ **Click product image in cart → opens product details page**
-
 ✅ **Click product name in cart → opens product details page**
-
 ✅ **Auto-close cart drawer on product click**
-
 ✅ **Hover effect on clickable products** (scale, color change)
-
 ✅ **Mobile tap feedback**
 
 ### Phase 19: Recent Fixes & Improvements
 ✅ **CORS configured** for Vercel production URL
-
 ✅ **Backend deployed on Render** with MongoDB Atlas
-
 ✅ **Frontend deployed on Vercel** with proper environment variables
-
 ✅ **Images array passed** in all product data (ProductPage, loadProducts, fetchWishlist)
-
 ✅ **Cart drawer cleanup** on checkout flow
-
 ✅ **Preventing duplicate cart items** when adding same product
+```
 
 ---
 
