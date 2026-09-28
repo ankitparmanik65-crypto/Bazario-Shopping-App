@@ -6,7 +6,7 @@ import authRoutes from './routes/authRoutes.js';
 import productRoutes from './routes/productRoutes.js';
 import { reviewRouter } from './routes/reviewRoutes.js';
 import wishlistRoutes from './routes/wishlistRoutes.js';
-import orderRoutes from './routes/orderRoutes.js';       
+import orderRoutes from './routes/orderRoutes.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import couponRoutes from './routes/couponRoutes.js';
 
@@ -16,13 +16,38 @@ connectDB();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// ⭐ CORS Configuration — Allow multiple origins
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'https://shopping-app-flax.vercel.app',
+  'https://bazario-shopping-app.vercel.app'   // ⭐ Naya Vercel URL
+];
+
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'https://shopping-app-flax.vercel.app'
-  ],
-  credentials: true
+  origin: function (origin, callback) {
+    // Allow requests with no origin (mobile apps, Postman)
+    if (!origin) return callback(null, true);
+
+    // ✅ Allow all Vercel subdomains (preview deployments bhi)
+    if (/\.vercel\.app$/.test(origin)) {
+      return callback(null, true);
+    }
+
+    // ✅ Allow from explicit list
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      return callback(null, true);
+    }
+
+    // ❌ Block others
+    console.log('❌ CORS blocked origin:', origin);
+    callback(new Error('Not allowed by CORS'));
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -42,8 +67,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/reviews', reviewRouter);
 app.use('/api/wishlist', wishlistRoutes);
-app.use('/api/orders', orderRoutes);    
-app.use('/api/coupons', couponRoutes);              
+app.use('/api/orders', orderRoutes);
+app.use('/api/coupons', couponRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
