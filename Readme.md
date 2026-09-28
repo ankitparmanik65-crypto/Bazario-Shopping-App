@@ -449,10 +449,6 @@ Cart      ↓
       ↓
    Order Tracking (Cancel option)
 
-
-
-🎯 What's Been Built (Feature Log)
-
 ---
 
 ## 🎯 What's Been Built (Feature Log)
