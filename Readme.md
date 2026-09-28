@@ -418,8 +418,8 @@ BAZARIO SHOPPING APP/
 └── README.md
 ```
 
-```
 🛒 Complete User Flow
+```
 ┌─────────────────────┐
 │   Product List      │
 └──────────┬──────────┘
