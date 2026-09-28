@@ -326,6 +326,7 @@ A modern, full-stack e-commerce web application built with **React**, **Node.js*
 ---
 
 ## 📁 Project Structure
+```
 BAZARIO SHOPPING APP/
 │
 ├── Backend/
@@ -415,7 +416,7 @@ BAZARIO SHOPPING APP/
 │ └── vite.config.js
 │
 └── README.md
-
+```
 
 🛒 Complete User Flow
 ┌─────────────────────┐
