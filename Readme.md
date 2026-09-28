@@ -418,6 +418,7 @@ BAZARIO SHOPPING APP/
 └── README.md
 ```
 
+```
 🛒 Complete User Flow
 ┌─────────────────────┐
 │   Product List      │
@@ -449,33 +450,25 @@ Cart      ↓
    Order History (Route: /orders)
       ↓
    Order Tracking (Cancel option)
-
+```
 ---
 
 ## 🎯 What's Been Built (Feature Log)
-
+```
 ### Phase 1: Foundation
 ✅ React + Vite frontend setup
-
 ✅ Node.js + Express backend setup
-
 ✅ MongoDB connection
-
 ✅ User model, Product model
 
 ### Phase 2: Authentication
 ✅ Register / Login with JWT
-
 ✅ Password hashing (bcryptjs)
-
 ✅ Auth middleware
-
 ✅ Role-based access (user/admin)
-
 ✅ Auth Context in frontend
-
 ✅ Login/Register pages with error handling
-
+```
 ### Phase 3: Products
 ✅ Products API (CRUD, filter, search, pagination)
 
