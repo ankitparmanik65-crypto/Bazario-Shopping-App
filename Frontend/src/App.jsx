@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import {
   Routes,
@@ -319,7 +319,8 @@ function ProductPage({
 // ═══════════════════════════════════════
 
 function App() {
-  const { user, isAuthenticated, isAdmin, logout } = useAuth();
+  const { user, isAuthenticated, isAdmin, logout, loading: authLoading } =
+    useAuth();
   const navigate = useNavigate();
 
   const [pendingCheckout, setPendingCheckout] = useState(false);
@@ -336,14 +337,24 @@ function App() {
   const [hasMoreProducts, setHasMoreProducts] = useState(true);
   const PRODUCTS_PER_LOAD = 50;
 
-  // ⭐ USER-SPECIFIC CART INITIALIZATION
+  // ⭐ Ref jo track karta hai cart kis user ka hai
+  //   - "undefined" = guest
+  //   - "<userId>"  = us user ka cart
+  const cartOwnerRef = useRef(null);
+
+  // ⭐ Cart state — initial load pe localStorage se sahi key ke saath
   const [cart, setCart] = useState(() => {
     const storedUser = JSON.parse(
       localStorage.getItem("bazario_user") || "null"
     );
     const cartKey = getCartKey(storedUser?._id);
+    cartOwnerRef.current = storedUser?._id || null;
     const savedCart = localStorage.getItem(cartKey);
-    return savedCart ? JSON.parse(savedCart) : [];
+    try {
+      return savedCart ? JSON.parse(savedCart) : [];
+    } catch {
+      return [];
+    }
   });
 
   const [orders, setOrders] = useState([]);
@@ -526,43 +537,86 @@ function App() {
     loadProducts();
   }, [page]);
 
-  // ⭐ USER-SPECIFIC CART SAVE
+  // ═══════════════════════════════════════════════════════════════
+  // ⭐⭐⭐ CART SYNC — SINGLE SOURCE OF TRUTH ⭐⭐⭐
+  // Yeh ek hi useEffect saara cart ka kaam karta hai:
+  //   1. User change detect karo
+  //   2. Naye user ka cart load karo (guest migration ke saath)
+  //   3. Race condition khatam
+  // ═══════════════════════════════════════════════════════════════
   useEffect(() => {
-    const cartKey = getCartKey(user?._id);
-    localStorage.setItem(cartKey, JSON.stringify(cart));
-  }, [cart, user?._id]);
+    // Auth abhi load ho raha hai — kuch mat karo
+    if (authLoading) return;
 
-  // ⭐ CART RELOAD ON USER CHANGE (login/logout)
-  useEffect(() => {
-    const cartKey = getCartKey(user?._id);
-    const savedCart = localStorage.getItem(cartKey);
-    setCart(savedCart ? JSON.parse(savedCart) : []);
-  }, [user?._id]);
+    const currentUserId = user?._id || null;
 
-  // ⭐ GUEST CART MIGRATION ON LOGIN
-  useEffect(() => {
-    if (!user?._id) return;
+    // Agar cart owner pehle se hi same user ka hai, toh kuch mat karo
+    // (yeh effect sirf user change pe chalna chahiye, har render pe nahi)
+    if (cartOwnerRef.current === currentUserId) return;
 
-    const guestCartKey = "cart_guest";
-    const userCartKey = `cart_${user._id}`;
+    const prevOwner = cartOwnerRef.current;
 
-    const guestCart = localStorage.getItem(guestCartKey);
-    const userCart = localStorage.getItem(userCartKey);
+    // ─── Step 1: Naye user ki cart key se data load karo ───
+    const newCartKey = getCartKey(currentUserId);
 
-    if (guestCart && !userCart) {
-      try {
-        const guestCartData = JSON.parse(guestCart);
-        if (guestCartData && guestCartData.length > 0) {
-          localStorage.setItem(userCartKey, guestCart);
-          localStorage.removeItem(guestCartKey);
-          setCart(guestCartData);
-          toast.success("Your cart has been saved! 🛒");
+    // ─── Step 2: Guest → User migration (sirf login ke waqt) ───
+    //   Condition: pehle guest tha (null), ab user hai
+    if (prevOwner === null && currentUserId !== null) {
+      const guestCartRaw = localStorage.getItem("cart_guest");
+      const userCartRaw = localStorage.getItem(newCartKey);
+
+      if (guestCartRaw && !userCartRaw) {
+        try {
+          const guestCartData = JSON.parse(guestCartRaw);
+          if (Array.isArray(guestCartData) && guestCartData.length > 0) {
+            localStorage.setItem(newCartKey, guestCartRaw);
+            localStorage.removeItem("cart_guest");
+            cartOwnerRef.current = currentUserId;
+            setCart(guestCartData);
+            toast.success("Your cart has been saved! 🛒");
+            return;
+          }
+        } catch (e) {
+          console.error("Guest cart migration error:", e);
         }
-      } catch (error) {
-        console.error("Cart migration error:", error);
       }
     }
-  }, [user?._id]);
+
+    // ─── Step 3: Naye user ka cart load karo ───
+    const savedRaw = localStorage.getItem(newCartKey);
+    let newCart = [];
+    try {
+      newCart = savedRaw ? JSON.parse(savedRaw) : [];
+      if (!Array.isArray(newCart)) newCart = [];
+    } catch {
+      newCart = [];
+    }
+
+    // Owner update karo PEHLE, taaki Save effect isko respect kare
+    cartOwnerRef.current = currentUserId;
+    setCart(newCart);
+  }, [user?._id, authLoading]);
+
+  // ═══════════════════════════════════════════════════════════════
+  // ⭐⭐⭐ CART SAVE — sirf tab jab owner match kare ⭐⭐⭐
+  // Yeh effect tabhi save karega jab cartOwnerRef current user se
+  // match kare. Isse race condition nahi hoti.
+  // ═══════════════════════════════════════════════════════════════
+  useEffect(() => {
+    if (authLoading) return;
+    const currentUserId = user?._id || null;
+
+    // Agar cart abhi kisi aur user ka hai (transition ho raha hai),
+    // toh save MAT karo — warna purana cart naye user ki key me save ho jayega
+    if (cartOwnerRef.current !== currentUserId) return;
+
+    const cartKey = getCartKey(currentUserId);
+    try {
+      localStorage.setItem(cartKey, JSON.stringify(cart));
+    } catch (e) {
+      console.error("Cart save error:", e);
+    }
+  }, [cart, user?._id, authLoading]);
 
   // ═══ Fetch orders ═══
   const fetchOrders = async () => {
@@ -814,7 +868,20 @@ function App() {
   };
 
   const handleLogout = () => {
+    // Logout se pehle current user ka cart save ho chuka hai (Save effect)
+    // Ab cart state ko guest cart pe reset karo
     logout();
+    const guestRaw = localStorage.getItem("cart_guest");
+    let guestCart = [];
+    try {
+      guestCart = guestRaw ? JSON.parse(guestRaw) : [];
+      if (!Array.isArray(guestCart)) guestCart = [];
+    } catch {
+      guestCart = [];
+    }
+    cartOwnerRef.current = null;
+    setCart(guestCart);
+    setIsCartOpen(false);
     setPendingCheckout(false);
     toast.success("Logged out successfully");
     navigate("/");
@@ -838,8 +905,8 @@ function App() {
 
   // ⭐ CART PRODUCT CLICK HANDLER
   const handleCartProductClick = (item) => {
-    setIsCartOpen(false); // Cart drawer close karo
-    navigate(`/product/${item.id}`); // Product details page pe jao
+    setIsCartOpen(false);
+    navigate(`/product/${item.id}`);
   };
 
   // ═══ ORDER SUCCESS FULLSCREEN ═══

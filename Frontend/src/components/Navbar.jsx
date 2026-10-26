@@ -68,9 +68,7 @@ function Navbar({
                 {user?.name?.charAt(0).toUpperCase()}
               </div>
               <div className="user-info">
-                <span className="user-name">
-                  {user?.name?.split(" ")[0]}
-                </span>
+                <span className="user-name">{user?.name?.split(" ")[0]}</span>
                 {isAdmin && <span className="user-role">Admin</span>}
               </div>
               <button className="logout-button" onClick={onLogout}>

@@ -7,12 +7,15 @@ function Cart({
   removeFromCart,
   onCheckout,
   isAuthenticated,
-  onProductClick,   // ⭐ NAYA prop
+  onProductClick, // ⭐ Product detail pe jaane ke liye
 }) {
   const FREE_SHIPPING_LIMIT = 5000;
 
-  const subtotal = cart.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+  // Safety: agar cart undefined/null ho toh empty array maano
+  const safeCart = Array.isArray(cart) ? cart : [];
+
+  const subtotal = safeCart.reduce(
+    (sum, item) => sum + (item.price || 0) * (item.quantity || 0),
     0
   );
 
@@ -36,7 +39,7 @@ function Cart({
 
   return (
     <div className="cart-container">
-      {cart.length === 0 ? (
+      {safeCart.length === 0 ? (
         /* ═══ EMPTY CART ═══ */
         <div className="empty-cart">
           <div className="empty-cart-icon">🛒</div>
@@ -53,8 +56,8 @@ function Cart({
               </div>
             ) : (
               <div className="shipping-progress-text">
-                🚚 Add <strong>₹{remainingAmount}</strong> more for FREE
-                shipping.
+                🚚 Add <strong>₹{remainingAmount.toLocaleString("en-IN")}</strong>{" "}
+                more for FREE shipping.
               </div>
             )}
 
@@ -73,7 +76,7 @@ function Cart({
 
           {/* ═══ CART ITEMS ═══ */}
           <div className="cart-items">
-            {cart.map((item) => (
+            {safeCart.map((item) => (
               <div className="cart-item" key={item.id}>
                 {/* ⭐ CLICKABLE IMAGE */}
                 <img
@@ -95,7 +98,7 @@ function Cart({
                   </h3>
 
                   <p className="cart-product-price">
-                    ₹{item.price.toLocaleString("en-IN")}
+                    ₹{(item.price || 0).toLocaleString("en-IN")}
                   </p>
 
                   <div className="quantity-controls">
@@ -119,7 +122,10 @@ function Cart({
 
                 <div className="cart-item-right">
                   <strong className="cart-item-total">
-                    ₹{(item.price * item.quantity).toLocaleString("en-IN")}
+                    ₹
+                    {((item.price || 0) * (item.quantity || 0)).toLocaleString(
+                      "en-IN"
+                    )}
                   </strong>
 
                   <button
@@ -156,9 +162,7 @@ function Cart({
               }`}
               onClick={onCheckout}
             >
-              {isAuthenticated
-                ? "Place Order →"
-                : "🔐 Login to Checkout"}
+              {isAuthenticated ? "Place Order →" : "🔐 Login to Checkout"}
             </button>
           </div>
         </>

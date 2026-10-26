@@ -42,7 +42,8 @@ export const AuthProvider = ({ children }) => {
     return data;
   };
 
-  // Logout
+  // Logout — user state clear + localStorage se user hatao
+  // (App.jsx ka cart sync effect khud hi guest cart pe switch kar dega)
   const logout = () => {
     setUser(null);
     localStorage.removeItem('bazario_user');
